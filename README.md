@@ -8,25 +8,26 @@
   - [Run locally](#run-locally)
     - [Backend](#backend)
     - [Frontend](#frontend)
-  - [Docker (Linux)](#docker-linux)
+  - [Docker](#docker)
   - [Run on Docker containers](#run-on-docker-containers)
 - [Production Setup](#production-setup)
   - [Local (Linux & Windows)](#local-linux--windows)
     - [Backend](#backend-1)
     - [Frontend](#frontend-1)
-  - [Docker (Linux)](#docker-linux-1)
+  - [Docker](#docker-1)
+- [Credits](#credits)
 
 
 ## Development Setup
 
 First, clone the repo and cd into the project:
 ```bash
-git clone https://github.com/antoniosarosi/home-cloud.git
+git clone https://github.com/AngelAlonsoTec/home-cloud.git
 cd home-cloud
 ```
 
 ### Local setup (Linux & Windows)
-Install dependencies:
+You'll need **Node.js 22** or newer. Install dependencies:
 ```bash
 cd server
 npm i
@@ -46,7 +47,9 @@ cd server
 ```
 
 Open **sample.env** and copy its content into a new file named **.env**,
-then set the correct value for **HOME_CLOUD_STORAGE**. Now start the server:
+then set the correct values for **HOME_CLOUD_STORAGE** and
+**HOME_CLOUD_PASSWORD** (you'll need this password to log in). Now start the
+server:
 ```bash
 npm run dev
 ```
@@ -59,41 +62,35 @@ Move to the client directory:
 cd client
 ```
 
-Open **sample.env** and copy its content into a new file named **.env**,
-then set the correct value for **REACT_APP_API_URL**. Finally, start the 
-development server:
+Start the development server:
 ```bash
-npm start
+npm run dev
 ```
 
 Backend will be running on port **5000** and frontend on port **3000** (if not
-already in use).
+already in use). The frontend forwards every request to **/api** to the
+backend, so you only need to open http://localhost:3000.
 
-### Docker (Linux)
+### Docker
 
-First, set the correct value for **HOME_CLOUD_STORAGE** env variable:
+Open **sample.env** (the one in the root of the project) and copy its content
+into a new file named **.env**, then set the correct values for
+**HOME_CLOUD_STORAGE** and **HOME_CLOUD_PASSWORD**:
 ```bash
-export HOME_CLOUD_STORAGE="/home/user/example"
-```
-Then create a **.env** file in **./client/** and set this value:
-```bash
-REACT_APP_API_URL="http://localhost:8081"
+HOME_CLOUD_STORAGE="/home/user/example"
+HOME_CLOUD_PASSWORD="change-me"
 ```
 
-Install dependencies:
-```bash
-docker-compose run express npm i
-docker-compose run react npm i
-```
+Dependencies are installed when the containers start, no need to do anything
+else.
 
 ### Run on Docker containers
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
-Backend will be running on port **8081** and frontend on port **8080** (if not
-already in use).
+The app will be running on port **8080** (if not already in use).
 
 ## Production Setup
 
@@ -101,46 +98,42 @@ already in use).
 
 #### Backend
 
-Move to **./server/** and set the correct value for **HOME_CLOUD_STORAGE** in
-**.env** (see examples in **sample.env**), and then
-run npm start:
+Move to **./server/** and set the correct values for **HOME_CLOUD_STORAGE**
+and **HOME_CLOUD_PASSWORD** in **.env** (see examples in **sample.env**), and
+then run npm start:
 ```bash
 npm start
 ```
 
 #### Frontend
-Move to **./client/** and create a file named **.env.production**, set the
-correct value for **REACT_APP_API_URL** (see examples in **sample.env**). Then,
-install serve globaly:
-```bash
-npm i -g serve
-```
-
-Build the app:
+Move to **./client/** and build the app:
 
 ```bash
-npm run build # Or yarn build
+npm run build
 ```
 
-Start the server:
+Then serve the **dist** directory with a web server that also forwards
+**/api** to the backend. If you use nginx, you can copy the config from
+**nginx.conf** (change **http://api:5000** with **http://localhost:5000**).
 
-```bash
-serve -s build -l 3000 # Or another port of your choice
-```
+### Docker
 
-### Docker (Linux)
+Set the correct values in **.env** like in the
+[development setup](#docker). You can also change the port with
+**HOME_CLOUD_PORT**.
 
-First, set the correct value for **HOME_CLOUD_STORAGE** env variable:
-```bash
-export HOME_CLOUD_STORAGE="/home/user/example"
-```
-Then create a **.env.production** file in **./client/** and set the correct
-value for the API URL (your IP address and port 8081):
-```bash
-REACT_APP_API_URL="http://192.168.1.2:8081"
-```
+On Linux, the backend runs as user **node** (uid 1000), so make sure that
+user can write to **HOME_CLOUD_STORAGE**.
 
 Build images and run containers:
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
+
+The app will be running on port **8080**, so you can access it from any device
+in your network using your IP address, for example http://192.168.1.2:8080.
+
+## Credits
+
+Originally based on
+[home-cloud](https://github.com/antoniosarosi/home-cloud) by Antonio Sarosi.

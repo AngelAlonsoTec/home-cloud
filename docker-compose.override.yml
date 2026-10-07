@@ -1,17 +1,23 @@
-version: '3'
-
+# Development: source code is mounted and reloaded on every change.
+# node_modules live in anonymous volumes, so they are installed for Linux
+# inside the containers and never mixed with the ones on the host.
 services:
-    express:
-        image: "node:current-alpine"
-        working_dir: /usr/src/app/server
-        volumes:
-            - ./server:/usr/src/app/server
-            - ${HOME_CLOUD_STORAGE}:/usr/src/app/storage
-        command: "npm run dev"
+  api:
+    image: node:24-alpine
+    working_dir: /usr/src/app/server
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+    command: sh -c "npm ci && npm run dev"
 
-    react:
-        image: "node:current-alpine"
-        working_dir: /usr/src/app/client
-        volumes:
-            - ./client:/usr/src/app/client
-        command: "npm start"
+  web:
+    image: node:24-alpine
+    working_dir: /usr/src/app/client
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+    environment:
+      API_PROXY_TARGET: http://api:5000
+    command: sh -c "npm ci && npm run dev -- --host"
+    ports:
+      - "${HOME_CLOUD_PORT:-8080}:3000"

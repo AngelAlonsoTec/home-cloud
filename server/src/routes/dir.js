@@ -1,23 +1,14 @@
 const router = require('express').Router();
 const fs = require('fs');
 const path = require('path');
-const processPath = require('../lib/path');
+const { resolvePath, assertValidName } = require('../lib/storage-path');
 
-router.post('/:path?', async (req, res, next) => {
-  const dirPath = processPath(req.params.path);
-  const name = req.body.name;
-  if (!name) {
-    return res.status(400).json({
-      success: false,
-      message: 'No name was specified',
-    });
-  }
+router.post('/', async (req, res) => {
+  const parent = resolvePath(req.query.path);
+  const name = req.body?.name;
+  assertValidName(name);
 
-  try {
-    await fs.promises.mkdir(path.join(dirPath.absolutePath, name));
-  } catch (e) {
-    return next(e);
-  }
+  await fs.promises.mkdir(path.join(parent.absolutePath, name));
 
   res.json({ success: true, message: 'Directory created' });
 });

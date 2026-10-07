@@ -1,0 +1,504 @@
+/* Colors based on Atom's One Dark / One Light themes */
+:root {
+  --bg: #21252b;
+  --surface: #282c34;
+  --surface-hover: #2f343e;
+  --border: #3a3f4b;
+  --text: #abb2bf;
+  --text-strong: #e6e9ef;
+  --text-muted: #7f8794;
+  --blue: #61afef;
+  --green: #98c379;
+  --red: #e06c75;
+  --yellow: #e5c07b;
+  --purple: #c678dd;
+  --cyan: #56b6c2;
+  --on-accent: #1b1f25;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --radius: 10px;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f0f1f4;
+    --surface: #fafafa;
+    --surface-hover: #eceef2;
+    --border: #dcdfe5;
+    --text: #383a42;
+    --text-strong: #1f2127;
+    --text-muted: #6f737c;
+    --blue: #4078f2;
+    --green: #50a14f;
+    --red: #e45649;
+    --yellow: #c18401;
+    --purple: #a626a4;
+    --cyan: #0184bc;
+    --on-accent: #ffffff;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    color-scheme: light;
+  }
+}
+
+/* Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* Buttons and inputs */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-strong);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.button-primary {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--on-accent);
+}
+
+.button-primary:hover:not(:disabled) {
+  background: var(--blue);
+  filter: brightness(1.08);
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+}
+
+.input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 25%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* Top bar */
+
+.topbar {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 960px;
+  height: 56px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-strong);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.logo svg {
+  color: var(--blue);
+}
+
+/* Login */
+
+.login {
+  max-width: 360px;
+  margin: 12vh auto 0;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.login h1 {
+  margin: 0 0 4px;
+  color: var(--text-strong);
+  font-size: 22px;
+}
+
+.login p {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+}
+
+.login form {
+  display: grid;
+  gap: 12px;
+}
+
+.login .button {
+  justify-content: center;
+}
+
+.login .form-error {
+  margin: 0;
+  color: var(--red);
+  font-size: 14px;
+}
+
+/* Toolbar */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .toolbar-actions {
+    width: 100%;
+  }
+
+  .toolbar-actions .button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Path bar */
+
+.path-bar {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  min-height: 38px;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.breadcrumbs li + li::before {
+  content: '/';
+  padding: 0 4px;
+  color: var(--text-muted);
+}
+
+.breadcrumbs a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  padding: 4px 6px;
+  overflow: hidden;
+  border-radius: 6px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.breadcrumbs a:hover {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+}
+
+.breadcrumbs li:last-child a {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.path-form {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
+/* Directory listing */
+
+.listing {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entries li + li {
+  border-top: 1px solid var(--border);
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 8px 16px;
+  color: var(--text-strong);
+  transition: background 0.12s;
+}
+
+a.entry:hover {
+  background: var(--surface-hover);
+}
+
+.entry-name {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.entry-action {
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.entry:hover .entry-action,
+.entry:focus-visible .entry-action {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .entry-action {
+    opacity: 1;
+  }
+}
+
+.entry form {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
+.icon-folder { color: var(--yellow); }
+.icon-image { color: var(--purple); }
+.icon-video { color: var(--red); }
+.icon-audio { color: var(--cyan); }
+.icon-archive { color: var(--green); }
+.icon-file { color: var(--blue); }
+
+.listing-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 56px 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty svg {
+  color: var(--border);
+}
+
+.empty strong {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.error-state svg {
+  color: var(--red);
+}
+
+/* Drag and drop */
+
+.drop-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  border: 2px dashed var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* Spinner */
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  margin: 48px auto;
+  border: 3px solid var(--border);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border-width: 2px;
+  border-top-color: currentColor;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Toast */
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 420px;
+  margin-left: auto;
+  padding: 12px 8px 12px 16px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-strong);
+  box-shadow: var(--shadow);
+  animation: slide-in 0.2s ease-out;
+}
+
+.toast-error {
+  border-left-color: var(--red);
+}
+
+.toast span {
+  flex: 1;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .spinner {
+    animation-duration: 0s;
+  }
+}

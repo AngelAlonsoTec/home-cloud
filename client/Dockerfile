@@ -1,21 +1,17 @@
-FROM node:current-alpine as builder
+FROM node:24-alpine AS builder
 
 WORKDIR /usr/src/app/client
 
-COPY ["package*.json","."]
+COPY package*.json ./
 
 RUN npm ci
 
-COPY [".", "."]
+COPY . .
 
 RUN npm run build
 
-FROM node:current-alpine
+FROM nginx:1.28-alpine
 
-WORKDIR /usr/src/app/client
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /usr/src/app/client/build .
-
-RUN npm i -g serve
-
-CMD ["serve", "-s", "build", "-l", "3000" ]
+COPY --from=builder /usr/src/app/client/dist /usr/share/nginx/html

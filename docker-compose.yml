@@ -1,15 +1,17 @@
-version: '3'
-
+# Shared configuration. Combine it with docker-compose.override.yml
+# (development, loaded by default) or docker-compose.prod.yml (production).
+# Variables are read from the .env file next to this one (see sample.env).
 services:
-    express:
-        environment: 
-            HOME_CLOUD_STORAGE: /usr/src/app/storage
-        ports:
-            - "8081:5000"
+  api:
+    environment:
+      HOME_CLOUD_STORAGE: /storage
+      HOME_CLOUD_PASSWORD: ${HOME_CLOUD_PASSWORD:?Set HOME_CLOUD_PASSWORD in .env}
+      HOME_CLOUD_SESSION_SECRET: ${HOME_CLOUD_SESSION_SECRET:-}
+      HOME_CLOUD_SESSION_HOURS: ${HOME_CLOUD_SESSION_HOURS:-168}
+      HOME_CLOUD_MAX_UPLOAD_MB: ${HOME_CLOUD_MAX_UPLOAD_MB:-4096}
+    volumes:
+      - ${HOME_CLOUD_STORAGE:?Set HOME_CLOUD_STORAGE in .env}:/storage
 
-    react:
-        ports:
-            - "8080:3000"
-        depends_on: 
-            - express
-        stdin_open: true
+  web:
+    depends_on:
+      - api
